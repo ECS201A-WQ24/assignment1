@@ -1,6 +1,6 @@
 ---
 Author: Jason Lowe-Power
-Editor:  Maryam Babaie, Mahyar Samani
+Editor:  Maryam Babaie, Mahyar Samani, Kaustav Goswami
 Title: ECS 201A Assignment 1
 ---
 
@@ -8,15 +8,15 @@ Title: ECS 201A Assignment 1
 
 Originally from University of Wisconsin-Madison CS/ECE 752 .
 
-Modified for ECS 201A, Winter 2023.
+Modified for ECS 201A, Winter 2024.
 
-**Due on 01/20/2023 11:59 pm (PST)**: See [Submission](#submission) for details
+**Due on 01/19/2024 11:59 pm (PST)**: See [Submission](#submission) for details
 
 ## Table of Contents
 
-- [Administrivia](#adminstrivia)
+- [Administrative](#adminstrative)
 - [Introduction](#introduction)
-- [Workload](#workload)
+- [Workload Simulation](#workload)
 - [Experimental setup](#experimental-setup)
 - [Analysis and simulation](#analysis-and-simulation)
 - [Submission](#submission)
@@ -24,26 +24,68 @@ Modified for ECS 201A, Winter 2023.
 - [Academic misconduct reminder](#academic-misconduct-reminder)
 - [Hints](#hints)
 
-## Adminstrivia
+## Adminstrative
 
-You should submit your report in **pairs** and in **PDF** format. Make sure to start early and post any questions you might have on Piazza. The standard late assignemt policy applies.
+You should submit your report in **pairs** and in **PDF** format. Make sure to
+start early and post any questions you might have on Piazza. The standard late
+assignemt policy applies.
 
 ## Introduction
 
 In this assignment you are going to:
 
-- measure the performance differences of a single-cycle like processor vs an in-order pipelined processor,
+- use **gem5**, a cycle-level architecture simulator
+- measure the performance differences of a single-cycle like processor vs an
+in-order pipelined processor,
 - see how the measured performance scales as CPU clock frequency changes,
 - and see the effect of memory bandwidth and latency on measured performance.
 
-You are going to use a matrix multiplication program as the workload for your experiments. Matrix multiplication is a commonly used kernel in many domains such as linear algebra, machine learning, and fluid dynamics.
+### gem5
+
+gem5 is an open-source system-level and processor simulator⁴. It's a modular
+platform for computer-system architecture research, encompassing system-level
+architecture as well as processor microarchitecture. gem5 is a community-led
+project with an open governance model¹. It was originally conceived for
+computer architecture research in academia, but it has grown to be used in
+computer system design by academia, industry for research, and in teaching.
+You can read more on gem5 here:
+
+1. https://www.gem5.org/
+2. https://en.wikipedia.org/wiki/Gem5
+
+<!-- ### Multiply and Accumulate
+
+The workload for this assignment will be to perform a multiply and accumulate,
+or MAC operation on two matrices. MAC is a funcdamental operation, that is
+commonly used in machine learning, digital signal processing and
+high-performance computing. The operation multiplies two numbers and adds the
+product to an accumulator. This operation is often performed in a loop to
+process an array of data.
+
+Here is an example of an MAC operation on 2 2x2 matrices.
+
+$$A = \begin{bmatrix}
+a & b\\
+c & d
+\end{bmatrix}$$
+$$B = \begin{bmatrix}
+e & f \\
+g & h
+\end{bmatrix}
+$$ -->
+
+
+You are going to use a matrix dot product program as the workload for your
+experiments. Matrix multiplication is a commonly used kernel in many domains
+such as linear algebra, machine learning, and fluid dynamics.
+See [Workload Simulation](#workload)
 
 ## Workload
 
 For this assignment we are going to use a matrix multiplication program as our workload. The program takes and integer as input that determines the `size` of the square matrices `A`, `B`, and `C`.
 
 ```cpp
-void multiply(double **A, double **B, double **C, int size)
+void dot(double **A, double **B, double **C, int size)
 {
     for (int i = 0; i < size; i++) {
         for (int k = 0; k < size; k++) {
@@ -55,30 +97,48 @@ void multiply(double **A, double **B, double **C, int size)
 }
 ```
 
-You can find the definitions for the workload objects in gem5 under `workloads/workloads.py`.
-In this assignment, we will only be using `MatMulWorkload`.
-In order to create an object of `MatMulWorkload` you just need to pass matrix size (an integer) `mat_size` to its constructor (`__init__`) function.
-**In your configuration choose an appropriate value for `mat_size`**. It should be large enough that it makes your workload interesting.
-Since changing `mat_size` will influence simulation time, as a guideline, choose a value that results in simulation times less than 10 minutes (hostSeconds < 600).
-We found that setting mat_size to 224 will result in a simulation time of around 5 minutes which is a reasonable compromise.
+You can find the definitions for the workload objects in gem5 under
+`workloads/workloads.py`. In this assignment, we will only be using
+`MatDotWorkload`. In order to create an object of `MatMulWorkload` you just
+need to pass matrix size (an integer) `mat_size` to its constructor
+(`__init__`) function.
 
-**CAVEAT [PLEASE READ CAREFULLY]**: When using this workload with gem5, your simulation will output two sets of statistics in the same `stats.txt` file. Each set of statistics start with a line like below.
+**In your configuration choose an appropriate value for `mat_size`**. It should
+be **large enough** that it makes your workload interesting.
+Since changing `mat_size` will influence simulation time, as a guideline,
+choose a value that results in simulation times less than 10 minutes
+(hostSeconds < 600).
+
+<!-- We found that setting mat_size to 224 will result in a
+simulation time of around 5 minutes which is a reasonable compromise. -->
+
+<!-- **CAVEAT [PLEASE READ CAREFULLY]**: When using this workload with gem5, your simulation will output two sets of statistics in the same `stats.txt` file. Each set of statistics start with a line like below.
 
 ```text
 ---------- Begin Simulation Statistics ----------
 ```
 
-Please make sure to **ignore** the **second** set of generated statistics in your analysis.
+Please make sure to **ignore** the **second** set of generated statistics in your analysis. -->
 
 ## Experimental setup
 
-For this assignment, we will set up an experiment to see effect of changing a system's component on it performance. You will need to write configuration scripts using gem5 stdlib that allow you to change the CPU model, CPU and cache frequency, and memory model.
-Under the `components` directory, you will find modules that define the different models that you should use in your configuration scritps.
+For this assignment, we will set up an experiment to see effect of changing a
+system's component on it performance. <u>You will need to write configuration
+scripts using gem5 stdlib that allow you to change the CPU model, CPU and cache
+frequency, and memory model.</u>
+Under the `components` directory, you will find modules that define the
+different models that you should use in your configuration scritps.
 
-- Board models: You can find all the models you need to use for your CPU (processor) under `components/boards.py`. You will only be using `HW1RISCVBoard` in this assignment.
-- CPU models: You can find all the models you need to use for your CPU (processor) under `components/processors.py`.
-- Cache models: You can find all the models you need to use for your cache hierarchy under `components/cache_hierarchies.py`. You will only use `HW1MESITwoLevelCache` in this assignment.
-- Memory models: You can find all the models you need to use for your memory under `components/memories.py`.
+- Board models: You can find all the models you need to use for your CPU
+(processor) under `components/boards.py`. You will only be using
+`HW1RISCVBoard` in this assignment.
+- CPU models: You can find all the models you need to use for your CPU
+(processor) under `components/processors.py`.
+- Cache models: You can find all the models you need to use for your cache
+hierarchy under `components/cache_hierarchies.py`. You will only use
+`HW1MESITwoLevelCache` in this assignment.
+- Memory models: You can find all the models you need to use for your memory
+under `components/memories.py`.
 
 ## Analysis and simulation
 
