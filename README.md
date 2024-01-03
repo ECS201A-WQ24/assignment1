@@ -178,12 +178,7 @@ We have compiled binaries with flags `-O0` and `-O3`. The former reduces the
 compilation time and makes debugging produce expected results. The latter
 optimizes the code to the maximum possible limit. This *usually* means that
 there are less number of instructions in the more optimized version of the
-program. Let's look at the following computation:
-$$
-\begin{aligned}
-z = \alpha x + y
-\end{aligned}
-$$
+program. Let's look at the following computation: $z = \alpha x + y$.
 This operation first multiplies $\alpha$ and $x$, and then adds $y$ to the
 result. Assume that x, y and z are all float. In modern processors,
 these two steps are usually combined to do a `multiply and accumulate`
