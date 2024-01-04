@@ -10,11 +10,11 @@ Originally from University of Wisconsin-Madison CS/ECE 752 .
 
 Modified for ECS 201A, Winter 2024.
 
-**Due on 01/19/2024 11:59 pm (PST)**: See [Submission](#submission) for details
+**Due on 01/19 11:59 pm (PST)**: See [Submission](#submission) for details
 
 ## Table of Contents
 
-- [Administrative](#adminstrative)
+- [Administrivia](#adminstrivia)
 - [Introduction](#introduction)
 - [Workload Simulation](#workload)
 - [Experimental setup](#experimental-setup)
@@ -24,7 +24,7 @@ Modified for ECS 201A, Winter 2024.
 - [Academic misconduct reminder](#academic-misconduct-reminder)
 - [Hints](#hints)
 
-## Adminstrative
+## Administrivia
 
 You should submit your report in **pairs** and in **PDF** format. Make sure to
 start early and post any questions you might have on Piazza. The standard late
@@ -34,7 +34,7 @@ assignemt policy applies.
 
 In this assignment you are going to:
 
-- see a pactical demonstration of Iron Law of computer architecture.
+- see a pactical demonstration of the Iron Law of computer architecture.
 - measure the performance differences of a single-cycle like processor vs an
 in-order pipelined processor.
 - see how the measured performance scales as CPU clock frequency changes.
@@ -73,7 +73,8 @@ need to pass matrix size (an integer) `mat_size` to its constructor
 be **large enough** that it makes your workload interesting.
 Since changing `mat_size` will influence simulation time, as a guideline,
 choose a value that results in simulation times less than 10 minutes
-(hostSeconds < 600).
+(hostSeconds < 600). We found that setting mat_size to 224 will result in a
+simulation time of around 5 minutes which is a reasonable compromise.
 
 ## Experimental setup
 
@@ -197,7 +198,7 @@ will further improve? Why?
 
 In your report, answer the same questions after simulation supported with data.
 A complete set of simualtion data for this step should include
-**2 configurations** (1 for O0 and 1 for O3)
+**2 configurations** (1 for -O0 and 1 for -O3)
 
 ### Step IV: General questions
 
