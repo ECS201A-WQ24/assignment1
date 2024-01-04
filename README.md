@@ -169,7 +169,7 @@ In this step, you'll be using different compiler optimizations to run the same
 matrix multiplication program. Compiler optimization flags are options that can
 be used to improve the *performance* of the program at the expense of
 compilation time and the ability to debug the program. The default version of
-the matrix multiply program is compiled with flag `-O2`:
+the matrix multiply program is compiled with the flag `-O2`:
 
 ```sh
 g++ -o mm mm.cpp -static -O2
@@ -184,7 +184,7 @@ This operation first multiplies $\alpha$ and $x$, and then adds $y$ to the
 result. Assume that x, y and z are all float. In modern processors,
 these two steps are usually combined to do a `multiply and accumulate`
 operation in a single step. If the compiler detects such computations, it'll
-try to optimize this from two `ld` and one `st` to an MAC operation like
+try to optimize this from two `ld` and one `st` to a MAC operation like
 `fmadd.d` instruction.
 When we look at the assembly, it generates an `fmadd.d rd, rs1, rs2, rs3`.
 
