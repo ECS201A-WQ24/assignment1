@@ -26,29 +26,26 @@ Modified for ECS 201A, Winter 2024.
 
 ## Administrivia
 
-You should submit your report in **pairs** and in **PDF** format. Make sure to
-start early and post any questions you might have on Piazza. The standard late
-assignemt policy applies.
+You should submit your report in **pairs** and in **PDF** format.
+Make sure to start early and post any questions you might have on Piazza. The standard late assignemt policy applies.
 
 ## Introduction
 
 In this assignment you are going to:
 
-- see a pactical demonstration of the Iron Law of computer architecture.
-- measure the performance differences of a single-cycle like processor vs an
-in-order pipelined processor.
+- see a pactical demonstration of the Iron Law of computer architecture,
+- measure the performance differences of a single-cycle like processor vs an in-order pipelined processor.
 - see how the measured performance scales as CPU clock frequency changes.
 - and see the effect of memory bandwidth and latency on measured performance.
 
-You are going to use a DAXPY program as the workload for your
-experiments. The name DAXPY stands for "Double precision Alpha X Plus Y".
+You are going to use a DAXPY program as the workload for your experiments.
+The name DAXPY stands for "Double precision Alpha X Plus Y".
 It’s a commonly used operation in programs that work with matrices and vectors.
 
 ## Workload
 
-For this assignment we are going to use a matrix multiplication program as our
-workload. The program takes and integer as input that determines the `size` of
-the square matrices `A`, `B`, and `C`.
+For this assignment we are going to use a matrix multiplication program as our workload.
+The program takes and integer as input that determines the `size` of the square matrices `A`, `B`, and `C`.
 
 ```cpp
 void multiply(double **A, double **B, double **C, int size)
@@ -63,53 +60,41 @@ void multiply(double **A, double **B, double **C, int size)
 }
 ```
 
-You can find the definitions for the workload objects in gem5 under
-`workloads/workloads.py`. In this assignment, we will only be using
-`MatDotWorkload`. In order to create an object of `MatMulWorkload` you just
-need to pass matrix size (an integer) `mat_size` to its constructor
-(`__init__`) function.
+You can find the definitions for the workload objects in gem5 under `workloads/workloads.py`.
+In this assignment, we will only be using `MatDotWorkload`.
+In order to create an object of `MatMulWorkload` you just need to pass matrix size (an integer) `mat_size` to its constructor (`__init__`) function.
 
-**In your configuration choose an appropriate value for `mat_size`**. It should
-be **large enough** that it makes your workload interesting.
-Since changing `mat_size` will influence simulation time, as a guideline,
-choose a value that results in simulation times less than 10 minutes
-(hostSeconds < 600). We found that setting mat_size to 224 will result in a
-simulation time of around 5 minutes which is a reasonable compromise.
+**In your configuration choose an appropriate value for `mat_size`**.
+It should be **large enough** that it makes your workload interesting.
+Since changing `mat_size` will influence simulation time, as a guideline, choose a value that results in simulation times less than 10 minutes (hostSeconds < 600).
+We found that setting mat_size to 224 will result in a simulation time of around 5 minutes which is a reasonable compromise.
 
 ## Experimental setup
 
-For this assignment, we will set up an experiment to see effect of changing a
-system's component on it performance. <u>You will need to write configuration
-scripts using gem5 stdlib that allow you to change the CPU model, CPU and cache
-frequency, and memory model.</u>
-Under the `components` directory, you will find modules that define the
-different models that you should use in your configuration scritps.
+For this assignment, we will set up an experiment to see effect of changing a system's component on it performance.
+<u>You will need to write configuration scripts using gem5 stdlib that allow you to change the CPU model, CPU and cache frequency, and memory model.</u>
+Under the `components` directory, you will find modules that define the different models that you should use in your configuration scritps.
 
-- Board models: You can find all the models you need to use for your CPU
-(processor) under `components/boards.py`. You will only be using
-`HW1RISCVBoard` in this assignment.
+- Board models: You can find all the models you need to use for your CPU (processor) under `components/boards.py`.
+You will only be using `HW1RISCVBoard` in this assignment.
 - CPU models: You can find all the models you need to use for your CPU
 (processor) under `components/processors.py`.
-- Cache models: You can find all the models you need to use for your cache
-hierarchy under `components/cache_hierarchies.py`. You will only use
-`HW1MESITwoLevelCache` in this assignment.
-- Memory models: You can find all the models you need to use for your memory
-under `components/memories.py`.
+- Cache models: You can find all the models you need to use for your cache hierarchy under `components/cache_hierarchies.py`.
+You will only use `HW1MESITwoLevelCache` in this assignment.
+- Memory models: You can find all the models you need to use for your memory under `components/memories.py`.
 
 ## Analysis and simulation
 
-Complete the following steps and answer the questions for your report. Collect
-data from your simulation runs and use simulator statistics to answer the
-questions. Use clear reasoning and visualization to drive your conclusions.
+Complete the following steps and answer the questions for your report.
+Collect data from your simulation runs and use simulator statistics to answer the questions.
+Use clear reasoning and visualization to drive your conclusions.
 You are allowed to submit your reports in **pairs** and in **PDF** format.
 
 Before starting with simulations, answer the following questions in your
 report.
 
-1. What metrics should you use to measure the performance of a computer system?
-Why?
-2. Why is it not always possible to use the same metrics for performance to
-evaluate computer systems?
+1. What metrics should you use to measure the performance of a computer system? Why?
+2. Why is it not always possible to use the same metrics for performance to evaluate computer systems?
 3. Define the Iron law of processor performance.
 4. What does an Instruction Set Architecture (ISA) define?
 
@@ -118,12 +103,8 @@ evaluate computer systems?
 Before running any simulations try to answer these questions in terms of the
 iron law:
 
-1. At the same clock frequency, between a single-cycle CPU
-(`HW1TimingSimpleCPU`) and an in-order pipelined CPU (`HW1MinorCPU`) which CPU
-will exhibit better performance? Why?
-2. Between a single-cycle CPU (`HW1TimingSimpleCPU`) and an in-order pipelined
-CPU (`HW1MinorCPU`) CPU which one is going to be more sensitive to changing the
-clock frequency? Why?
+1. At the same clock frequency, between a single-cycle CPU (`HW1TimingSimpleCPU`) and an in-order pipelined CPU (`HW1MinorCPU`) which CPU will exhibit better performance? Why?
+2. Between a single-cycle CPU (`HW1TimingSimpleCPU`) and an in-order pipelined CPU (`HW1MinorCPU`) CPU which one is going to be more sensitive to changing the clock frequency? Why?
 
 In your configuration script allow for:
 
@@ -133,19 +114,14 @@ In your configuration script allow for:
 Use `HW1DDR3_1600_8x8` as the memory model.
 
 In your report, answer the same questions after simulation supported with data.
-A complete set of simualtion data for this step should include
-**6 configurations** (2 options for CPU model * 3 options for clock frequency).
+A complete set of simualtion data for this step should include **6 configurations** (2 options for CPU model * 3 options for clock frequency).
 
 ### Step II: Changing the CPU and memory model
 
-Before running any simulations try to answer these questions in terms of the
-iron law:
+Before running any simulations try to answer these questions in terms of the iron law:
 
-1. If you double the double the performance of memory (double the bandwidth and
-halfen the latency) in a computer system, will the overall perforamance double
-as well? Why?
-2. Which CPU model (between `HW1TimingSimpleCPU` and `HW1MinorCPU`) will
-benefit more from improving memory performance? Why?
+1. If you double the double the performance of memory (double the bandwidth and halfen the latency) in a computer system, will the overall perforamance double as well? Why?
+2. Which CPU model (between `HW1TimingSimpleCPU` and `HW1MinorCPU`) will benefit more from improving memory performance? Why?
 
 In your configuration allow for:
 
@@ -155,21 +131,15 @@ and `HW1LPDDR3_1600_1x32`.
 
 Use `4GHz` as the clock frequency.
 
-**NOTE**: To become familiar with the different memory models you will use in
-this assignment, please read through the documentation for the different memory
-models in `components/memories.py`.
+**NOTE**: To become familiar with the different memory models you will use in this assignment, please read through the documentation for the different memory models in `components/memories.py`.
 
 In your report, answer the same questions after simulation supported with data.
-A complete set of simualtion data for this step should include
-**6 configurations** (2 options for CPU model * 3 options for memory model).
+A complete set of simualtion data for this step should include **6 configurations** (2 options for CPU model * 3 options for memory model).
 
 ### Step III: Using different compiler optimizations
 
-In this step, you'll be using different compiler optimizations to run the same
-matrix multiplication program. Compiler optimization flags are options that can
-be used to improve the *performance* of the program at the expense of
-compilation time and the ability to debug the program. The default version of
-the matrix multiply program is compiled with the flag `-O2`:
+In this step, you'll be using different compiler optimizations to run the same matrix multiplication program.
+Compiler optimization flags are options that can be used to improve the *performance* of the program at the expense of compilation time and the ability to debug the program. The default version of the matrix multiply program is compiled with the flag `-O2`:
 
 ```sh
 g++ -o mm mm.cpp -static -O2
@@ -188,49 +158,77 @@ try to optimize this from two `ld` and one `st` to a MAC operation like
 `fmadd.d` instruction.
 When we look at the assembly, it generates an `fmadd.d rd, rs1, rs2, rs3`.
 
-Use the `HW1TimingSimpleCPU` and `HW1DDR3_1600_8x8` for this step.
+Let us look at a C++ example.
+For the function defined below, we used [godbolt](https://godbolt.org) to generate its RISCV assembly using different compiler optimization flags:
+```cpp
+float multiply_and_accumulate(float alpha, float x, float y) {
+    return alpha * x + y;
+}
+```
+When using `-O0`, we get the following output:
+```asm
+multiply_and_accumulate(float, float, float):
+        addi    sp,sp,-32
+        sd      s0,24(sp)
+        addi    s0,sp,32
+        fsw     fa0,-20(s0)
+        fsw     fa1,-24(s0)
+        fsw     fa2,-28(s0)
+        flw     fa4,-20(s0)
+        flw     fa5,-24(s0)
+        fmul.s  fa4,fa4,fa5
+        flw     fa5,-28(s0)
+        fadd.s  fa5,fa4,fa5
+        fmv.s   fa0,fa5
+        ld      s0,24(sp)
+        addi    sp,sp,32
+        jr      ra
+```
+When using `-O1`, we get the following output:
+```sam
+multiply_and_accumulate(float, float, float):
+        fmul.s  fa0,fa0,fa1
+        fadd.s  fa0,fa0,fa2
+        ret
+```
+Finally, when using `-O2` or `-O3` for this code, we get the following:
+```asm
+multiply_and_accumulate(float, float, float):
+        fmadd.s fa0,fa0,fa1,fa2
+        ret
+```
+
+For this experiment, use the `HW1TimingSimpleCPU` and `HW1DDR3_1600_8x8` for this step.
 
 Before running any simulations try to answer this question, which has 4 parts:
 
-1. Which program do you think will perform better? What part of the Iron Law
-are you optimizing in this step? Do you think if you use CSIC ISA, the results
-will further improve? Why?
+1. Which program do you think will perform better? What part of the Iron Law are you optimizing in this step? Do you think if you use CSIC ISA, the results will further improve? Why?
 
 In your report, answer the same questions after simulation supported with data.
-A complete set of simualtion data for this step should include
-**2 configurations** (1 for -O0 and 1 for -O3)
+A complete set of simualtion data for this step should include **2 configurations** (1 for -O0 and 1 for -O3)
 
 ### Step IV: General questions
 
-Now that you have completed your simulation runs and analyses. Answer this last
-question in your report.
+Now that you have completed your simulation runs and analyses. Answer this last question in your report.
 
-1. If you were to use a different application, do you think your conclusions
-would change? Why?
+1. If you were to use a different application, do you think your conclusions would change? Why?
 
 ## Submission
 
-Your submission is split into two parts. Read the following sections for
-details on each part.
+Your submission is split into two parts. Read the following sections for details on each part.
 
 ### Part I: Reproducibility package
 
-As part of your submission, you should include any script/code/file that might
-be needed to rerun your gem5 experiments. This may include configuration
-scripts that define set up the simulation, python/shell/etc. scripts that drive
-your simulations using your configuration scripts, any document including
-instruction on how to run your simulations. You should do this through your
-assignment's repository. Make sure to commit and push your changes to your
-local repository to your remote. Add clear and relevant commit messages to your
-commits. **NOTE**: Any commits/pushes past the assignment deadline will be
-ignored.
+As part of your submission, you should include any script/code/file that might be needed to rerun your gem5 experiments.
+This may include configuration scripts that define set up the simulation, python/shell/etc. scripts that drive your simulations using your configuration scripts, any document including instruction on how to run your simulations.
+You should do this through your assignment's repository.
+Make sure to commit and push your changes to your local repository to your remote.
+Add clear and relevant commit messages to your commits. **NOTE**: Any commits/pushes past the assignment deadline will be ignored.
 
 ### Part II: Report
 
-As mentioned before, you are allowed to submit your assignments in **pairs**
-and in **PDF** format.
-You should submit your report on
-[gradescope](https://www.gradescope.com/courses/487868).
+As mentioned before, you are allowed to submit your assignments in **pairs** and in **PDF** format.
+You should submit your report on [gradescope](https://www.gradescope.com/courses/487868).
 In your report answer the questions presented in
 [Analysis and simulation](#analysis-and-simulation),
 [Analysis and simulation: Step I](#step-i-changing-the-cpu-model-and-cpu-and-cache-clock-frequency),
@@ -246,37 +244,34 @@ Use clear reasoning and visualization to drive your conclusions.
 Like your submission, your grade is split into two parts.
 
 1. Reproducibility Package (50 points):
-    1. Instruction and automation to run simulations for different section and
+    - Instruction and automation to run simulations for different section and
     dump statistics (20 points)
-    2. Instructions (10 points)
-    3. Automation (10 points)
-    4. Configuration scripts and correct simulation setup (30 points): 2.5
+    - Instructions (10 points)
+    - Automation (10 points)
+    - Configuration scripts and correct simulation setup (30 points): 2.5
     points for each configuration as described in
     [Analysis and simulation: Step I](#step-i-changing-the-cpu-model-and-cpu-and-cache-clock-frequency)
     and
     [Analysis and simulation: Step II](#step-ii-changing-the-cpu-and-memory-model)
-2. Report (50 points): 5 points for each question presented in 
-[Analysis and simulation](#analysis-and-simulation),
-[Analysis and simulation: Step I](#step-i-changing-the-cpu-model-and-cpu-and-cache-clock-frequency), [Analysis and simulation: Step II](#step-ii-changing-the-cpu-and-memory-model),
-[Analysis and simulation: Step III](#step-iii-using-different-compiler-optimizations),
-and
-[Analysis and simulation: Step IV](#step-iv-general-questions).
+2. Report (50 points): See the gradescope page for the complete breakdown for each of the questions.
+    - [Analysis and simulation](#analysis-and-simulation) (5 x 2 + 4 points),
+    - [Analysis and simulation: Step I](#step-i-changing-the-cpu-model-and-cpu-and-cache-clock-frequency) (5 x 3 points),
+    - [Analysis and simulation: Step II](#step-ii-changing-the-cpu-and-memory-model) (5 x 2 points),
+    - [Analysis and simulation: Step III](#step-iii-using-different-compiler-optimizations) (2 x 5 + 1 points),
+    - [Analysis and simulation: Step IV](#step-iv-general-questions) (5 x 1 points).
 
 ## Academic misconduct reminder
 
-You are required to work on this assignment in teams. You are only allowed to
-share you scripts and code with your teammate(s). You may discuss high level
-concepts with others in the class but all the work must be completed by your
-team and your team only.
+You are required to work on this assignment in teams.
+You are only allowed to share you scripts and code with your teammate(s).
+You may discuss high level concepts with others in the class but all the work must be completed by your team and your team only.
 
-Remember, DO NOT POST YOUR CODE PUBLICLY ON GITHUB! Any code found on GitHub
-that is not the base template you are given will be reported to SJA. If you
-want to sidestep this problem entirely, don’t create a public fork and instead
-create a private repository to store your work.
+Remember, DO NOT POST YOUR CODE PUBLICLY ON GITHUB!
+Any code found on GitHub that is not the base template you are given will be reported to SJA.
+If you want to sidestep this problem entirely, don’t create a public fork and instead create a private repository to store your work.
 
 ## Hints
 
 - Use the terms in the iron law to justify your answers.
 - Start early and ask questions on Piazza and in discussion.
-- If you need help, come to office hours for the TA, or post your questions on
-Piazza.
+- If you need help, come to office hours for the TA, or post your questions on Piazza.
