@@ -96,7 +96,6 @@ report.
 1. What metrics should you use to measure the performance of a computer system? Why?
 2. Why is it not always possible to use the same metrics for performance to evaluate computer systems?
 3. Define the Iron law of processor performance.
-4. What does an Instruction Set Architecture (ISA) define?
 
 ### Step I: Changing the CPU model and CPU and cache clock frequency
 
@@ -202,7 +201,9 @@ For this experiment, use the `HW1TimingSimpleCPU` and `HW1DDR3_1600_8x8` for thi
 
 Before running any simulations try to answer this question, which has 4 parts:
 
-1. Which program do you think will perform better? What part of the Iron Law are you optimizing in this step? Do you think if you use CSIC ISA, the results will further improve? Why?
+1. Which program do you think will perform better?
+2. What part of the Iron Law are you optimizing in this step?
+3. Do you think if you use CSIC ISA, the results will further improve? Why?
 
 In your report, answer the same questions after simulation supported with data.
 A complete set of simualtion data for this step should include **2 configurations** (1 for -O0 and 1 for -O3)
